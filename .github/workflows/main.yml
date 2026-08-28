@@ -1,19 +1,15 @@
-yamlname: Continuous Delivery
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+name: CI/CD
+on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
       - run: pip install -r requirements.txt
-      - run: pytest
+      - run: pytest -v
   deploy:
     needs: build
     runs-on: ubuntu-latest
