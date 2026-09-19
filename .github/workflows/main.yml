@@ -1,7 +1,5 @@
 name: CI/CD
-
 on: [push]
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,18 +12,17 @@ jobs:
       - run: pytest -v
       - name: Build Docker image
         run: docker build -t meu-app.
-      - name: Alerta - Build finalizado com sucesso
+      - name: Alerta - Build sucesso
         if: success()
-        run: echo "ALERTA: Pipeline executada com sucesso - 5 testes passaram"
+        run: echo "ALERTA: Pipeline executada com sucesso"
       - name: Alerta - Falha no build
         if: failure()
-        run: echo "ALERTA CRITICO: Falha no build ou nos testes!"
-
+        run: echo "ALERTA CRITICO: Falha detectada"
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploy realizado com sucesso!"
-      - name: Alerta - Deploy realizado
+      - name: Alerta - Deploy
         if: success()
-        run: echo "ALERTA: Deploy realizado com sucesso na branch main"
+        run: echo "ALERTA: Deploy realizado"
