@@ -1,33 +1,16 @@
 name: CI/CD
-
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
+      - run: pip install pytest
       - run: pytest -v
-      - name: Build Docker image
-        run: docker build -t meu-app .
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deploy realizado com sucesso!"
-
-  notify:
-    needs: [build, deploy]
-    if: failure()
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "ALERTA: O workflow falhou! Verifique os logs."
