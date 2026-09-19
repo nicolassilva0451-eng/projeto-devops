@@ -1,31 +1,20 @@
+
 name: CI/CD
-
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
+on: [push]
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run 5 unit tests
-        run: pytest -v
+      - run: pip install -r requirements.txt
+      - run: pytest -v
       - name: Build Docker image
         run: docker build -t meu-app .
-
-  notify-on-failure:
-    needs: build-and-test
-    if: failure()
+  deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Alerta de falha
-        run: echo "🚨 ALERTA: Workflow falhou! Verifique os logs no GitHub Actions."
+      - run: echo "Deploy realizado com sucesso!"
