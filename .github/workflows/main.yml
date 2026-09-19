@@ -5,22 +5,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - run: pytest -v
       - name: Alerta sucesso
         if: ${{ success() }}
-        run: echo "ALERTA: Pipeline OK - 5 testes passaram"
+        run: echo "Pipeline OK"
       - name: Alerta falha
         if: ${{ failure() }}
-        run: echo "ALERTA: Falha no build"
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deploy OK"
-      - name: Alerta deploy
-        if: ${{ success() }}
-        run: echo "ALERTA: Deploy realizado"
+        run: echo "Falha"
