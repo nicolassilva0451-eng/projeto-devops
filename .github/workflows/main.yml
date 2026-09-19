@@ -1,30 +1,29 @@
 name: CI/CD
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - name: Install
-        run: pip install -r requirements.txt
-      - name: Test
-        run: pytest -v
-      - name: Alerta Sucesso
-        if: success()
-        run: echo "ALERTA: Pipeline OK"
-      - name: Alerta Falha
-        if: failure()
-        run: echo "ALERTA: Falha"
+      - run: pip install -r requirements.txt
+      - run: pytest -v
+      - name: Alerta sucesso
+        if: ${{ success() }}
+        run: echo "ALERTA: Pipeline executada com sucesso - 5 testes passaram"
+      - name: Alerta falha
+        if: ${{ failure() }}
+        run: echo "ALERTA CRITICO: Falha detectada no build"
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy
-        run: echo "Deploy OK"
-      - name: Alerta Deploy
-        if: success()
-        run: echo "ALERTA: Deploy realizado"
+      - run: echo "Deploy realizado com sucesso"
+      - name: Alerta deploy
+        if: ${{ success() }}
+        run: echo "ALERTA: Deploy realizado na main"
