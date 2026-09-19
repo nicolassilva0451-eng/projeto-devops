@@ -10,17 +10,14 @@ jobs:
           python-version: '3.11'
       - run: pip install -r requirements.txt
       - run: pytest -v
-      - name: Alerta - Build com sucesso
+      - name: Alerta sucesso
         if: success()
-        run: echo "ALERTA: Pipeline executada com sucesso - 5 testes passaram"
-      - name: Alerta - Falha no build
+        run: echo "ALERTA: Pipeline OK"
+      - name: Alerta falha
         if: failure()
-        run: echo "ALERTA CRITICO: Falha no build"
+        run: echo "ALERTA: Falha no pipeline"
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Deploy realizado com sucesso"
-      - name: Alerta - Deploy realizado
-        if: success()
-        run: echo "ALERTA: Deploy OK na main"
+      - run: echo "Deploy OK"
