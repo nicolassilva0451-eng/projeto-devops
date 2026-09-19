@@ -7,27 +7,25 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
-      - run: pytest -v
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run 5 unit tests
+        run: pytest -v
       - name: Build Docker image
         run: docker build -t meu-app .
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "Deploy realizado com sucesso!"
-
-  notify:
-    needs: [build, deploy]
+  notify-on-failure:
+    needs: build-and-test
     if: failure()
     runs-on: ubuntu-latest
     steps:
-      - run: echo "ALERTA: O workflow falhou! Verifique os logs."
+      - name: Alerta de falha
+        run: echo "🚨 ALERTA: Workflow falhou! Verifique os logs no GitHub Actions."
