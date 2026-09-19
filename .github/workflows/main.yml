@@ -11,17 +11,17 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pytest -v
       - run: docker build -t meu-app.
-      - name: Alerta sucesso build
+      - name: Alerta sucesso
         if: success()
-        run: echo "ALERTA: Pipeline executada com sucesso"
-      - name: Alerta falha build
+        run: echo "ALERTA: Pipeline OK"
+      - name: Alerta falha
         if: failure()
-        run: echo "ALERTA CRITICO: Falha"
+        run: echo "ALERTA: Falha"
   deploy:
     needs: build
     runs-on: ubuntu-latest
     steps:
       - run: echo "Deploy OK"
-      - name: Alerta deploy sucesso
+      - name: Alerta deploy
         if: success()
-        run: echo "ALERTA: Deploy realizado com sucesso"
+        run: echo "ALERTA: Deploy OK"
